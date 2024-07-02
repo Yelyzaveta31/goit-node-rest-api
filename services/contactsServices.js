@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 
 const contactsPath = path.join(process.cwd(), "db", "contacts.json");
 
-async function listContacts() {
+export async function listContacts() {
   try {
     const data = await fs.readFile(contactsPath, "utf-8");
     return JSON.parse(data);
@@ -13,7 +13,7 @@ async function listContacts() {
   }
 }
 
-async function getContactById(contactId) {
+export async function getContactById(contactId) {
   try {
     const contacts = await listContacts();
     const contact = contacts.find(contact => contact.id === contactId);
@@ -24,7 +24,7 @@ async function getContactById(contactId) {
   }
 }
 
-async function removeContact(contactId) {
+export async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
     const contactIndex = contacts.findIndex(contact => contact.id === contactId);
@@ -40,7 +40,7 @@ async function removeContact(contactId) {
   }
 }
 
-async function addContact(name, email, phone) {
+export async function addContact(name, email, phone) {
   try {
     const contacts = await listContacts();
     const newContact = {
@@ -58,4 +58,18 @@ async function addContact(name, email, phone) {
   }
 }
 
-export { listContacts, getContactById, removeContact, addContact };
+export async function updateContact(id, data) {
+  try {
+    const contacts = await listContacts();
+    const contactIndex = contacts.findIndex(contact => contact.id === id);
+    if (contactIndex === -1) {
+      return null;
+    }
+    contacts[contactIndex] = { ...contacts[contactIndex], ...data };
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[contactIndex];
+  } catch (error) {
+    console.error('Error contacts', error.message);
+    return null;
+  }
+}
