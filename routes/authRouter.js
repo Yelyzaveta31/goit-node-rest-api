@@ -1,5 +1,6 @@
 import { Router } from "express";
 import validateBody from "../helpers/validateBody";
+import { userAuthSchema } from "../schemas/userSchemas";
 
 const authRouter = Router();
 
