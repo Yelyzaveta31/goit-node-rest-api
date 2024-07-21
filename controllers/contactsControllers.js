@@ -1,12 +1,22 @@
 
-import { updateContactSchema } from "../schemas/contactsSchemas.js";
-import { listContacts, getContactById, addContact, removeContact, updateContact } from "../services/contactsServices.js";
+import HttpError from "../helpers/HttpError.js";
+import { listContacts, getContactById, addContact, removeContact, updateContact, updateContactStatus } from "../services/contactsServices.js";
 
 
 export const getAllContacts = async (req, res, next) => {
     try {
-        const contacts = await listContacts();
-        res.json(contacts);
+        const { _id: owner } = req.user;
+        const filter = { owner };
+        if (req.query.favorite) {
+            filter.favorite=req.query.favorite === "true";
+        }
+        const data = await listContacts({filter});
+
+        res.json({
+            status: 200,
+            message: "Contacts get successfully",
+            contacts,
+          });
     }
     catch(error) {
     next(error);
@@ -15,11 +25,19 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getOneContact = async (req, res,next ) => {
     try {
-        const contact = await getContactById(req.params.id);
+        const {id: _id} = req.params;
+        const {_id: owner} = req.user;
+        const data = await getContactById({ _id, owner})
+        
         if(!contact) {
-            return res.status(404).json({"message": "Not found"})
+            throw HttpError(404, `Const with id ${_id} not found`);
         }
-        res.json(contact);
+
+          res.json({
+      status: 201,
+      message: `Contact get successfully`,
+      data,
+    });
     }
     catch(error){
         next(error);
@@ -28,22 +46,41 @@ export const getOneContact = async (req, res,next ) => {
 
 export const deleteContact = async (req, res, next) => {
     try {
-        const contact= await removeContact(req.params.id);
-        if(!contact) {
-            return res.status(404).json({"message": "Not found"});
-        }
-        res.json(contact);
+      const { id: _id } = req.params;
+      const { _id: owner } = req.user;
+  
+      const data = await removeContact({ _id, owner });
+  
+      if (!data) {
+        throw HttpError(404);
+      }
+  
+      res.json({
+        status: 200,
+        message: `Contact was deleted successfully`,
+        data,
+      });
+    } catch (error) {
+      next(error);
     }
-    catch(error) {
-        next(error);
-    }
-};
+  };
 
-export const createContact =  async (req, res, next) => {
+  export const createContact = async (req, res, next) => {
     try {
-        const {name, email, phone} = req.body;
-        const newContact = await addContact(name, email, phone);
-        res.status(201).json(newContact);
+      const { _id: owner } = req.user;
+      const { name, email, phone, favorite } = req.body;
+  
+      const data = await addContact(name, email, phone, favorite, owner);
+  
+      if (!data) {
+        throw HttpError(400);
+      }
+  
+      res.status(201).json({
+        status: 201,
+        message: `Contact was added successfully`,
+        data,
+      });
     }
     catch(error) {
         next(error);
@@ -52,15 +89,41 @@ export const createContact =  async (req, res, next) => {
 
 export const updatedContactController = async (req, res, next) => {
     try {
-      const { error } = updateContactSchema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ message: error.message });
+        const { id: _id } = req.params;
+        const { _id: owner } = req.user;
+    
+        const data = await updateContact({ _id, owner }, req.body);
+    
+        if (!data) {
+          throw HttpError(404);
+        }
+    
+        res.json({
+          status: 200,
+          message: `Contact was updated successfully`,
+          data,
+        });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  export const editFavoriteStatus = async (req, res, next) => {
+    try {
+      const { id: _id } = req.params;
+      const { _id: owner } = req.user;
+      const { favorite } = req.body;
+  
+      const data = await updateContactStatus({ _id, owner }, favorite);
+      if (!data) {
+        throw HttpError(404);
       }
-      const updatedContact = await updateContact(req.params.id, req.body);
-      if (!updatedContact) {
-        return res.status(404).json({ message: "Not found" });
-      }
-      res.json(updatedContact);
+  
+      res.json({
+        status: 200,
+        message: `Contact was updated successfully`,
+        data,
+      });
     } catch (error) {
       next(error);
     }
