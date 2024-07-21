@@ -2,7 +2,7 @@ import { Router } from "express";
 import validateBody from "../helpers/validateBody";
 import { subscribtionSchema, userAuthSchema } from "../schemas/userSchemas";
 import { authenticate } from "../middlewares/authenticate";
-import { getCurrentUser, updateSubscription } from "../controllers/userControllers";
+import { getCurrentUser, logout, signin, signup, updateSubscription } from "../controllers/userControllers";
 
 const authRouter = Router();
 

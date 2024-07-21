@@ -1,7 +1,7 @@
 import HttpError from "../helpers/HttpError.js";
 import bcrypt from "bcrypt";
 import { findUser, userSignup } from "../services/userServices.js";
-
+import jwt from "jsonwebtoken";
 
 
 const { JWT_SECRET } = process.env;
