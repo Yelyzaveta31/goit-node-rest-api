@@ -10,6 +10,7 @@ import notFoundHandler from "./middlewares/notFoundHandler.js";
 import env from "./helpers/env.js";
 import authRouter from "./routes/authRouter.js";
 
+
 const startServer = () => {
   const port = Number(env("PORT", 3000));
   const app = express();
@@ -18,6 +19,7 @@ const startServer = () => {
 
   app.use(cors());
   app.use(express.json());
+  app.use(express.static("public"));
 
   app.use("/api/users", authRouter);
   app.use("/api/contacts", contactsRouter);
