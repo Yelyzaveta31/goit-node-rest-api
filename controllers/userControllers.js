@@ -134,7 +134,7 @@ export const updateAvatar = async (req, res, next) => {
     const newPath = path.join(avatarsPath, filename)
     await fs.rename(oldPath, newPath);
 
-    const avatar = path.join("avatars", filename).replace(/\\/g, "/");
+    const avatarURL = path.join("avatars", filename).replace(/\\/g, "/");
 
     const updatedUser = await updateUser({ _id }, { avatar });
     if (!updatedUser) {
