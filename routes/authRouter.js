@@ -2,7 +2,7 @@ import { Router } from "express";
 import validateBody from "../helpers/validateBody";
 import { subscribtionSchema, userAuthSchema } from "../schemas/userSchemas";
 import { authenticate } from "../middlewares/authenticate";
-import { getCurrentUser, logout, signin, signup, updateSubscription } from "../controllers/userControllers";
+import { getCurrentUser, logout, signin, signup, updateAvatar, updateSubscription } from "../controllers/userControllers";
 import upload from "../middlewares/upload.js";
 
 const authRouter = Router();
@@ -26,5 +26,5 @@ authRouter.patch(
   
 authRouter.post("/logout", authenticate, logout);
 
-export default authRouter;
+export default authRouter
 
