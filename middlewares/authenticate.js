@@ -1,7 +1,8 @@
-import HttpError from "../utils/HttpError.js";
+
 import jwt from "jsonwebtoken";
 import { findUser } from "../services/userServices.js";
 import "dotenv/config";
+import HttpError from "../helpers/HttpError.js";
 const { JWT_SECRET } = process.env;
 
 export const authenticate = async (req, res, next) => {

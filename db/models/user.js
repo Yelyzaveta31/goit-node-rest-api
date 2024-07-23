@@ -1,7 +1,6 @@
-import { emailRegex } from "../../constants/user-constants";
-
-const { Schema } = require("mongoose")
-
+import { emailRegex } from "../../constants/user-constants.js";
+import { Schema, model } from "mongoose";
+import { mongoSaveError, setMongoUpdateSettings } from "./hooks.js";
 
 const userSchema = new Schema(
 {
