@@ -106,7 +106,7 @@ export const updateSubscription = async (req, res, next) => {
     const { _id } = req.user;
     const { subscription } = req.body;
 
-    const updatedUser = await updateUser({ _id }, { subscription });
+    const updatedUser = await updateUser({ _id }, { avatarURL });
 
     if (!updatedUser) {
       return next(HttpError(404, "User not found"));
@@ -136,7 +136,7 @@ export const updateAvatar = async (req, res, next) => {
 
     const avatarURL = path.join("avatars", filename).replace(/\\/g, "/");
 
-    const updatedUser = await updateUser({ _id }, { avatar });
+    const updatedUser = await updateUser({ _id }, { avatarU });
     if (!updatedUser) {
       return next(HttpError(404, "User not found"));
     }

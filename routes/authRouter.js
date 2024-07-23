@@ -1,8 +1,8 @@
 import { Router } from "express";
-import validateBody from "../helpers/validateBody";
-import { subscribtionSchema, userAuthSchema } from "../schemas/userSchemas";
-import { authenticate } from "../middlewares/authenticate";
-import { getCurrentUser, logout, signin, signup, updateAvatar, updateSubscription } from "../controllers/userControllers";
+import validateBody from "../helpers/validateBody.js";
+import { subscribtionSchema, userAuthSchema } from "../schemas/userSchemas.js";
+import { authenticate } from "../middlewares/authenticate.js";
+import { getCurrentUser, logout, signin, signup, updateAvatar, updateSubscription } from "../controllers/userControllers.js";
 import upload from "../middlewares/upload.js";
 
 const authRouter = Router();

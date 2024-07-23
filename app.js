@@ -1,5 +1,6 @@
-import initMongodbConnection from "./db/initMongodbConnection"
-import startServer from "./server";
+
+import initMongodbConnection from "./db/initMongodbConnection.js";
+import startServer from "./server.js";
 
 
 const bootsrap = async() => {
